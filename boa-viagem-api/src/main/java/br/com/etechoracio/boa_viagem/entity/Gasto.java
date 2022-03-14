@@ -1,5 +1,7 @@
 package br.com.etechoracio.boa_viagem.entity;
 
+import java.time.LocalDate;
+
 public class Gasto {
 	private Long id;
 	private String descricao;
