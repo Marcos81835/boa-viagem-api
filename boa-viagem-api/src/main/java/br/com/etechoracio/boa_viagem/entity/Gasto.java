@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.etechoracio.boa_viagem.enums.CategoriaEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,11 +33,12 @@ public class Gasto {
 	@Column(name="TX_LOCAL")
 	private String local;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="TP_CATEGORIA")
-	private String categoria;
+	private CategoriaEnum categoria;
 	
 	@Column(name="DT_GASTO")
-	private LocalDate gasto;
+	private LocalDate data;
 	
 	@Column(name="VLR_GASTO")
 	private Double valor;
