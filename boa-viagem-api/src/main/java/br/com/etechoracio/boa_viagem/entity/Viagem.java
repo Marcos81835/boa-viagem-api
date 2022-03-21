@@ -1,5 +1,5 @@
 package br.com.etechoracio.boa_viagem.entity;
-
+//só pra salvar
 import java.time.LocalDate;
 
 import javax.persistence.Column;
