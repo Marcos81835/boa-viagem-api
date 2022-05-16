@@ -3,7 +3,6 @@ package br.com.etechoracio.boa_viagem.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.etechoracio.boa_viagem.entity.Gasto;
-import br.com.etechoracio.boa_viagem.repository.GastoRepository;
+import br.com.etechoracio.boa_viagem.service.GastoService;
 
 @RestController
 @RequestMapping("/gastos")
 public class GastoController {
 	
-	@Autowired
-	private GastoRepository repository;
+	private GastoService service;
 	
 	@GetMapping
 	public List<Gasto> listarTodos(){
-		return repository.findAll();
+		return service.listarTodos();
 	}
 	
 /*	@GetMapping("/{id}")
@@ -41,7 +39,7 @@ public class GastoController {
 	}*/
 	@GetMapping("/{id}")
 	public ResponseEntity<Gasto> buscarPorId(@PathVariable Long id) {
-		Optional<Gasto> existe = repository.findById(id);
+		Optional<Gasto> existe = service.buscarPorId(id);
 		return existe.isPresent() ? ResponseEntity.ok(existe.get())
 								  : ResponseEntity.notFound().build();
 		}
@@ -49,29 +47,27 @@ public class GastoController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> excluir(@PathVariable long id) {
-		boolean existe = repository.existsById(id);
+		boolean existe = service.excluir(id);
 		if (existe) {
-			repository.deleteById(id);
 			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.notFound().build();
 		}
+		return ResponseEntity.notFound().build();
+		
 	}
 	
 	@PostMapping
 	public ResponseEntity<Gasto> inserir(@RequestBody Gasto obj) {
-		repository.save(obj);
+		service.inserir(obj);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Gasto> atualizar(@PathVariable Long id, 
 										   @RequestBody Gasto gasto) {
-		boolean existe = repository.existsById(id);
-		if (!existe) {
+		Optional<Gasto> existe = service.atualizar(id, gasto);
+		if (!existe.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		repository.save(gasto);
 		return ResponseEntity.ok(gasto);
 	}
 
