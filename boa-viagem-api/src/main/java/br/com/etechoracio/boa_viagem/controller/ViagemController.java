@@ -37,15 +37,6 @@ public class ViagemController {
 								  : ResponseEntity.notFound().build();
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> excluir (@PathVariable Long id) {
-		boolean existe = service.excluir(id);
-		if (existe) {
-			return ResponseEntity.ok().build();
-		} 
-		return ResponseEntity.notFound().build();
-	}
-	
 	@PostMapping
 	public ResponseEntity<Viagem> inserir(@RequestBody Viagem obj) {
 		service.inserir(obj);
@@ -60,5 +51,15 @@ public class ViagemController {
 				return ResponseEntity.notFound().build();
 			}
 			return ResponseEntity.ok(viagem);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> excluir(@PathVariable long id) {
+		boolean existe = service.excluir(id);
+		if (existe) {
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
+		
 	}
 }

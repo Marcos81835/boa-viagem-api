@@ -7,13 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.etechoracio.boa_viagem.entity.Gasto;
+import br.com.etechoracio.boa_viagem.entity.Viagem;
 import br.com.etechoracio.boa_viagem.repository.GastoRepository;
+import br.com.etechoracio.boa_viagem.repository.ViagemRepository;
 
 @Service
 public class GastoService {
 
 	@Autowired
 	private GastoRepository repository;
+	
+	@Autowired
+	private ViagemRepository viagemRepository;
 	
 	public List<Gasto> listarTodos(){
 		return repository.findAll();
@@ -32,6 +37,11 @@ public class GastoService {
 	}
 	
 	public Gasto inserir(Gasto obj) {
+		boolean existe = repository.existsById(obj.getViagem().getId());
+		if(!existe)
+		{
+			throw new RuntimeException("Viagem não encontrada");
+		}
 		return repository.save(obj);
 	}
 	
@@ -43,5 +53,4 @@ public class GastoService {
 			}
 			return Optional.of(repository.save(gasto));
 	}
-
 }
