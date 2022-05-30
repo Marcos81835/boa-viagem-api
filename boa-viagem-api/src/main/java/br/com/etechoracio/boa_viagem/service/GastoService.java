@@ -38,7 +38,6 @@ public class GastoService {
 	
 	public Gasto inserir(Gasto obj) {
 		Optional<Viagem> viagem = viagemRepository.findById(obj.getViagem().getId());
-		Optional<Gasto> gasto = repository.findById(obj.getViagem().getId());
 		
 		if(!viagem.isPresent())
 		{
@@ -48,7 +47,7 @@ public class GastoService {
 		{
 			throw new RuntimeException("Data de saida preenchida");
 		}
-		if(!viagem.get().getChegada().isBefore(gasto.get().getData()))
+		if(!viagem.get().getChegada().isBefore(obj.getData()))
 		{
 			throw new RuntimeException("Data de chegada é menor");
 		}
@@ -60,18 +59,17 @@ public class GastoService {
 						   			 Gasto gasto) {
 			boolean existe = repository.existsById(id);
 			Optional<Viagem> viagem = viagemRepository.findById(gasto.getViagem().getId());
-			Optional<Gasto> gastoViagem = repository.findById(gasto.getViagem().getId());
 			
 			if (!existe) {
 				return Optional.empty();
 			}
 			
-			if(!gastoViagem.get().getData().isBefore(viagem.get().getSaida())) 
+			if(gasto.getData().isBefore(viagem.get().getSaida())) 
 			{
 				throw new RuntimeException("Data gasto anterior a Saida");
 			}
 			
-			if(!gastoViagem.get().getViagem().getId().equals(viagem.get().getId()))
+			if(!gasto.getViagem().getId().equals(viagem.get().getId()))
 			{
 				throw new RuntimeException("Viagem de atualização não for a mesma viagem da inserção");
 			}
